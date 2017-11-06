@@ -24,23 +24,16 @@ const show = (req, res) => {
 }
 
 const create = (req, res, next) => {
-  let survey = Object.assign(req.body.survey, {
+  const survey = Object.assign(req.body.survey, {
     _owner: req.user._id
   })
-  const allQuestions = req.body.survey.questions
-  allQuestions.forEach((question) => {
-    question = Object.assign(question, {
-      _owner: req.user._id
-    })
-    survey.questions = question
-    Survey.create(survey)
-      .then(survey =>
-        res.status(201)
-          .json({
-            survey: survey.toJSON({ virtuals: true, user: req.user })
-          }))
-      .catch(next)
-  })
+  Survey.create(survey)
+    .then(survey =>
+      res.status(201)
+        .json({
+          survey: survey.toJSON({ virtuals: true, user: req.user })
+        }))
+    .catch(next)
 }
 
 const update = (req, res, next) => {

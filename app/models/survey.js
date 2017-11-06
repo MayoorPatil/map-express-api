@@ -8,7 +8,7 @@ const surveySchema = new mongoose.Schema({
     required: true
   },
   questions: [{
-    question1: {
+    question1: [{
       questionDescription: {
         type: String,
         required: true
@@ -21,8 +21,8 @@ const surveySchema = new mongoose.Schema({
         type: [],
         required: true
       }
-    },
-    question2: {
+    }],
+    question2: [{
       questionDescription: {
         type: String,
         required: true
@@ -35,8 +35,8 @@ const surveySchema = new mongoose.Schema({
         type: [],
         required: true
       }
-    },
-    question3: {
+    }],
+    question3: [{
       questionDescription: {
         type: String,
         required: true
@@ -49,7 +49,7 @@ const surveySchema = new mongoose.Schema({
         type: [],
         required: true
       }
-    }
+    }]
   }],
   _owner: {
     type: mongoose.Schema.Types.ObjectId,
