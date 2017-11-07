@@ -1,60 +1,14 @@
 'use strict'
 
 const mongoose = require('mongoose')
-const responseSchema = require('./response')
+const questionSchema = require('./question')
 
 const surveySchema = new mongoose.Schema({
   title: {
     type: String,
     required: true
   },
-  questions: [{
-    question1: [{
-      questionDescription: {
-        type: String,
-        required: true
-      },
-      active: {
-        type: Boolean,
-        required: true
-      },
-      options: {
-        type: [],
-        required: true
-      },
-      responses: [responseSchema]
-    }],
-    question2: [{
-      questionDescription: {
-        type: String,
-        required: true
-      },
-      active: {
-        type: Boolean,
-        required: true
-      },
-      options: {
-        type: [],
-        required: true
-      },
-      responses: [responseSchema]
-    }],
-    question3: [{
-      questionDescription: {
-        type: String,
-        required: true
-      },
-      active: {
-        type: Boolean,
-        required: true
-      },
-      options: {
-        type: [],
-        required: true
-      },
-      responses: [responseSchema]
-    }]
-  }],
+  questions: [questionSchema],
   _owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
