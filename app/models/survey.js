@@ -1,6 +1,7 @@
 'use strict'
 
 const mongoose = require('mongoose')
+const responseSchema = require('./response')
 
 const surveySchema = new mongoose.Schema({
   title: {
@@ -20,7 +21,8 @@ const surveySchema = new mongoose.Schema({
       options: {
         type: [],
         required: true
-      }
+      },
+      responses: [responseSchema]
     }],
     question2: [{
       questionDescription: {
@@ -34,7 +36,8 @@ const surveySchema = new mongoose.Schema({
       options: {
         type: [],
         required: true
-      }
+      },
+      responses: [responseSchema]
     }],
     question3: [{
       questionDescription: {
@@ -48,7 +51,8 @@ const surveySchema = new mongoose.Schema({
       options: {
         type: [],
         required: true
-      }
+      },
+      responses: [responseSchema]
     }]
   }],
   _owner: {
