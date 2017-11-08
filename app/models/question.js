@@ -17,7 +17,10 @@ const questionSchema = new mongoose.Schema({
       type: [],
       required: true
     },
-    responses: [responseSchema]
+    responses: {
+      type: [responseSchema],
+      default: []
+    }
   }
 })
 
