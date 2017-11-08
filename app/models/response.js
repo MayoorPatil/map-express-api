@@ -5,18 +5,24 @@ const mongoose = require('mongoose')
 const responseSchema = new mongoose.Schema({
   response: {
     answer: {
-      type: String
+      type: String,
+      default: '',
+      required: true
     },
     responseId: {
-      type: String
+      type: String,
+      default: '',
+      required: true
     },
     anonymous: {
-      type: Boolean
+      type: Boolean,
+      default: true,
+      required: true
+    },
+    _owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
     }
-  },
-  _owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
   }
 })
 
