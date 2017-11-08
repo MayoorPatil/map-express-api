@@ -1,278 +1,203 @@
-[![General Assembly Logo](https://camo.githubusercontent.com/1a91b05b8f4d44b5bbfb83abac2b0996d8e26c92/687474703a2f2f692e696d6775722e636f6d2f6b6538555354712e706e67)](https://generalassemb.ly/education/web-development-immersive)
+## Sema-four Front End Project: Survey Site (Survey Says!)
 
-# map-express-api
+## Project Description:
+'Survey Says!' is a lightweight survey site designed to allow for the creation
+of easy-to-answer surveys that may be shared with friends, family, and colleagues.
+When you sign up with 'Survey Says' you can start with creating your own survey
+in just minutes without needing to know programing or confusing scripting languages.
+Anyone can answer your survey questions! No pesky sign-up/sign-in requirements for
+your family and friends. In and out in just a few minutes.
 
-A template for starting projects with `express` as an API. Includes
-authentication and common middlewares.
+Once surveys start to receive responses you can visit the 'Survey Says!' dashboard
+to view survey results. Get useful data in realtime to help quickly answer your
+most pressing questions.
 
-At the beginning of each cohort, update the versions in
-[`package.json`](package.json) by replace all versions with a glob (`*`) and
-running `npm update --save && npm update --save-dev`. You may wish to test these
-changes by deleting the `node_modules` directory and running `npm install`.
-Fix any conflicts.
+## Project URLs:
+Sema-four Main Page: https://github.com/sema-four
+Front-End Repo: https://github.com/sema-four/survey-front-end
+Back-End Repo: https://github.com/sema-four/map-express-api
+Back-End App: https://map-express-api.herokuapp.com/
 
-This template follows Rails-like conventions for organizing controller and
-model code, and has a routing layer which is similar to the Rails routing DSL.
+## ERDs & Wireframes
 
-## Dependencies
+https://imgur.com/a/CchfI
 
-Install with `npm install`.
+## Resources
 
--   [`express`](http://expressjs.com/)
--   [`mongoose`](http://mongoosejs.com/)
+Surveys (./app/models/survey.js)
+Notes: A survey is the top level document which consists of a title, an
+array of questions, and a user.  Owner is a an Mongo ObjectId associating the
+survey with a signed in user. Surveys hold an array of questions (see below).
++--- Field -------+--------- Type -----+--- Required? ----+
+  title:            String                    Yes
+  questions:        String                    Yes
+  owner:            ObjectId                 Yes
 
-At the beginning of each cohort, update the versions in
-[`package.json`](package.json) by replace all versions with a glob (`*`) and
-running `npm update --save && npm update --save-dev`. You may wish to test these
-changes by deleting the `node_modules` directory and running `npm install`.
-Fix any conflicts.
+Questions(./app/models/question.js)
+Notes: Each survey holds an array of questions.  Questions consist of the
+questionDescription (or Title as seen in the UI). The field active is set by the
+application and will   Options simply refers to the
+choices the user is presented to answer the question.  Options is a field that
+will be used for future enhancements. Responses is an array to
+hold the answers provided by multiple survey takers (see below).  
 
-## Installation
++-------- Field -------+---- Type ---+--- Required? ----+
+  questionDescription:      String            Yes
+  active:                   Boolean           Yes
+  options:                  array             Yes (see Notes)
+  responses:                array             See below
 
-1.  [Download](../../archive/master.zip) this template.
-1.  Move the .zip file to your `wdi/projects/` directory and Unzip it (creating a folder) -- **NOTE:** if the folder was already unzipped, use the `mv` command line to move it to the `wdi/projects/` directory.
-1.  Rename the directory from map-express-api -> your-app-name.
-1.  Empty [`README.md`](README.md) and fill with your own content.
-1.  Move into the new project and `git init`.
-1.  Replace all instances of `'map-express-api'` with your app name. This
-    includes `package.json`, various debugger configurations, and the MongoDB
-    store.
-1.  Install dependencies with `npm install`.
-1.  From the root of your repository, run the following command. It will set a SECRET_KEY for development and testing.
- ```sh
- echo SECRET_KEY=$(/usr/local/opt/openssl/bin/openssl rand -base64 66 | tr -d '\n') >>.env
- ```
-1.  Either run the API server with `npm start` OR if you want your code to be reloaded on
-    change, you should `npm install --global nodemon` and use `nodemon` instead of
-    `npm start`.
-1.  Once everything is working, make an initial commit.
-1.  In order to make requests from your deployed client application, you will need
-to set `CLIENT_ORIGIN` in the environment (e.g. `heroku config:set
-CLIENT_ORIGIN=https://<github-username>.github.io`).
+Answers (./app/models/response.js)
+Notes: Each question holds an array of responses (aka answers).  Responses consist
+of a string (the answer itself) a responseId which is generated for you, and
+finally an owner object which is is the user.  Additionally the anonymous field
+will indicate whether the response was provided by an anonymous survey takers
+or a signed in user.     
 
-## Structure
++--- Field -------+------- Type ------+--- Required? ----+
+  answer:            String                 Yes
+  responseID:        String                 Yes
+  anonymous:         Boolean                Yes (see Notes)
+  owner:             ObjectId               No
 
-Dependencies are stored in [`package.json`](package.json).
+## API Definition
 
-Do not configure `grunt` packages directly in the
-[`Gruntfile.js`](Gruntfile.js). Instead, store configurations in the
-[`grunt`](grunt) directory. You won't need a top-level key, since that's
-generated by the `Gruntfile.js` based on the filename of the configuration
-object stored in the `grunt` directory.
+Resource Actions:
+Action--+---HTTP Verb-+---- URL -----+---- Description ------------------+
+create    POST          /surveys:id      creates a survey
+index     POST          /surveys         retrieves a list of all surveys
+destroy   DELETE        /surveys:id      deletes a survey
+update    PATCH         /surveys:id      updates a survey
 
-Developers should store JavaScript files in [`app/controllers`](app/controllers)
- and [`app/models`](app/models).
-Routes are stored in [`config/routes.js`](config/routes.js)
+Create: create(req, res, next)
+  - HTTP VERB POST
+  - Creates a new survey in the database associated with the current user
+  - Requires an authentication token in order to create surveys
+  - Returns status 201 and a JSON string containing the survey
 
-## Tasks
+Update: update(req, res, next)
+  - HTTP VERB: PATCH
+  - Will update a survey by allowing the user to add questions
+  - Requires an authentication token in order to update surveys
+  - Surveys and questions may not be modified by other registered users.  Only
+  the user associated with the survey may modify that survey.
+  - Returns status 204 if successful
+  - Will not allow reassignment of the owning user
 
-Developers should run these often!
+Destroy: destroy()
+  - HTTP VERB: DELETE
+  - Will delete an entire survey including the array of questions and answers
+  - Requires an authentication token in order to delete a surveys
+  - Surveys may not be deleted by other registered users.  Only the user associated
+  with the survey may delete that survey.
+  - Returns status 204 if successful
 
--   `grunt nag` or just `grunt`: runs code quality analysis tools on your code
-    and complains
--   `grunt reformat`: reformats all your code in a standard style
--   `grunt test`: runs any automated tests
+Index: index(req, res, next)
+  - HTTP VERB: POST
+  - Returns a JSON string containing all Surveys in the database
+  - Any site visitor may view the list of available surveys and provide answers
+  to a survey.
 
-## API
+## Authentication Resources & API
+User Resource Actions:
+-HTTP Verb-+ ---- URL -----+---- Description ------------------+
+    POST         /sign-up      creates a user
+    POST         /sign-in      retrieves a list of all players
+    DELETE       /players:id   logs the user out
+    PATCH        /players:id   changes the user's password
 
-Use this as the basis for your own API documentation. Add a new third-level
-heading for your custom entities, and follow the pattern provided for the
-built-in user authentication documentation.
+User Resource Notes:
+This full stack project uses the same General Assembly authentication api as was
+used for the Tic Tac Toe Project. Sample parameters are provided in JSON format
+below and suitable for inclusion in CURL scripts.
 
-Scripts are included in [`scripts`](scripts) to test built-in actions. Add your
-own scripts to test your custom API.
-
-### Authentication
-
-| Verb   | URI Pattern            | Controller#Action |
-|--------|------------------------|-------------------|
-| POST   | `/sign-up`             | `users#signup`    |
-| POST   | `/sign-in`             | `users#signin`    |
-| PATCH  | `/change-password/:id` | `users#changepw`  |
-| DELETE | `/sign-out/:id`        | `users#signout`   |
-
-#### POST /sign-up
-
-Request:
-
-```sh
-curl --include --request POST http://localhost:4741/sign-up \
-  --header "Content-Type: application/json" \
-  --data '{
-    "credentials": {
-      "email": "an@example.email",
-      "password": "an example password",
-      "password_confirmation": "an example password"
-    }
-  }'
+sign-in:
 ```
-
-```sh
-scripts/sign-up.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 201 Created
-Content-Type: application/json; charset=utf-8
-
-{
-  "user": {
-    "id": 1,
-    "email": "an@example.email"
+  "credentials": {
+    "email": "'"${EMAIL}"'",
+    "password": "'"${PASSWORD}"'",
+    "password_confirmation": "'"${PASSWORD}"'"
   }
+```
+sign-up:
+```
+"credentials": {
+  "email": "'"${EMAIL}"'",
+  "password": "'"${PASSWORD}"'",
+  "password_confirmation": "'"${PASSWORD}"'"
 }
 ```
-
-#### POST /sign-in
-
-Request:
-
-```sh
-curl --include --request POST http://localhost:4741/sign-in \
-  --header "Content-Type: application/json" \
-  --data '{
-    "credentials": {
-      "email": "an@example.email",
-      "password": "an example password"
-    }
-  }'
+change-password
 ```
-
-```sh
-scripts/sign-in.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-
-{
-  "user": {
-    "id": 1,
-    "email": "an@example.email",
-    "token": "33ad6372f795694b333ec5f329ebeaaa"
-  }
+"passwords": {
+  "old": "'"${OLDPW}"'",
+  "new": "'"${NEWPW}"'"
 }
 ```
+sign-out or logout requires only the user ID and the authentication token
 
-#### PATCH /change-password/:id
+Complete details of the authenticationapi may be found here:
+ https://git.generalassemb.ly/ga-wdi-boston/game-project-api
 
-Request:
+## CURL Script References:
 
-```sh
-curl --include --request PATCH http://localhost:4741/change-password/$ID \
-  --header "Authorization: Token token=$TOKEN" \
-  --header "Content-Type: application/json" \
-  --data '{
-    "passwords": {
-      "old": "an example password",
-      "new": "super sekrit"
-    }
-  }'
-```
+Authentication
+  Sign in      ./scripts/auth/sign-in.sh
+  Sign up      ./scripts/auth/sign-up.sh
+  Change pw    ./scripts/auth/change-password.sh
+  Log out      ./scripts/auth/sign-out.sh
 
-```sh
-ID=1 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/change-password.sh
-```
+Surveys
+  Create:   ./scripts/surveys/create.sh
+  Update:   ./scripts/surveys/update.sh
+  Destroy:  ./scripts/surveys/destroy.sh
+  Index:    ./scripts/surveys/index.sh
 
-Response:
+Questions
+  Create:   ./scripts/surveyresponses/create.sh
+  Update:   ./scripts/surveyresponses/update.sh
+  Destroy:  ./scripts/surveyresponses/destroy.sh
+  Index:    ./scripts/surveyresponses/index.sh
 
-```md
-HTTP/1.1 204 No Content
-```
+Answers
+  Create:   ./scripts/responses/create.sh
+  Update:   ./scripts/responses/update.sh
+  Destroy:  ./scripts/responses/destroy.sh
+  Index:    ./scripts/responses/index.sh
 
-#### DELETE /sign-out/:id
 
-Request:
+## Back-end Technologies
+  Mongoose
+  Mongo
+  Heroku (hosting the backend services)
+  Github (hosting the front end and version control)
 
-```sh
-curl --include --request DELETE http://localhost:4741/sign-out/$ID \
-  --header "Authorization: Token token=$TOKEN"
-```
+## Front-end Technologies
+  Express
+  JQuery
+  Bootstrap
+  AJAX
+  HTML
+  CSS
 
-```sh
-ID=1 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/sign-out.sh
-```
+## Use Cases and Story Inspirations
+- As a user I should be able to sign-up/register, so that I am allowed to access the website
+- As a user I should be able to sign-in with my own credentials, so that I can start using the website
+- As a user I should be able to change my password, so that my identity is secure
+- As a user I should be able to log out of the website
+- As a signed-in user I should be able to create, edit, view and delete my surveys
+- As an anonymous user I should be able to view a list of surveys and respond to any survey
+- As an signed-in user I should be able to view a list of surveys and respond to any survey
+- As a signed-in user i should be able to view responses to all my surveys
 
-Response:
+## about Sema-four
 
-```md
-HTTP/1.1 204 No Content
-```
+  Team Members:
+    Anne Belakonis
+    Mark Keeler
+    Mayoor Patil
+    Michael Dunn
 
-### Users
-
-| Verb | URI Pattern | Controller#Action |
-|------|-------------|-------------------|
-| GET  | `/users`    | `users#index`     |
-| GET  | `/users/1`  | `users#show`      |
-
-#### GET /users
-
-Request:
-
-```sh
-curl --include --request GET http://localhost:4741/users \
-  --header "Authorization: Token token=$TOKEN"
-```
-
-```sh
-TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/users.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-
-{
-  "users": [
-    {
-      "id": 2,
-      "email": "another@example.email"
-    },
-    {
-      "id": 1,
-      "email": "an@example.email"
-    }
-  ]
-}
-```
-
-#### GET /users/:id
-
-Request:
-
-```sh
-curl --include --request GET http://localhost:4741/users/$ID \
-  --header "Authorization: Token token=$TOKEN"
-```
-
-```sh
-ID=2 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/user.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-
-{
-  "user": {
-    "id": 2,
-    "email": "another@example.email"
-  }
-}
-```
-
-## [License](LICENSE)
-
-1.  All content is licensed under a CC­BY­NC­SA 4.0 license.
-1.  All software code is licensed under GNU GPLv3. For commercial use or
-    alternative licensing, please contact legal@ga.co.
+  Process:
+  Pair programing was used throughout the course of
+  the project with team members taking turns writing code for both the front and back ends of the application.  A Trello board was used to capture issues, user stories, and tasks.  
