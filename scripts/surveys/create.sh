@@ -12,22 +12,68 @@ curl "${API}${URL_PATH}" \
     "survey": {
       "title": "lets Go!",
       "questions": [{
-        "question1": {
+        "question": {
           "questionDescription": "Was this a good book?",
           "active": true,
-          "options": ["Strongly Agree", "Neutral", "Disagree"]
-        },
-        "question2": {
-          "questionDescription": "Was the length of the book what you expected?",
-          "active": true,
-          "options": ["Strongly Agree", "Neutral", "Disagree"]
-        },
-        "question3": {
+          "options": ["Strongly Agree", "Neutral", "Disagree"],
+          "responses": [{
+                  "response": {
+                    "answer": "Agree",
+                    "responseId": "123",
+                    "anonymous": false
+                  }
+                },
+                {
+                  "response": {
+                    "answer": "DisAgree",
+                    "responseId": "123",
+                    "anonymous": false
+                  }
+              },
+              {
+                "response": {
+                  "answer": "DisAgree",
+                  "responseId": "123",
+                  "anonymous": false
+                }
+              }]
+        }
+      },
+      {
+        "question": {
+        "questionDescription": "Was the length of the book what you expected?",
+        "active": true,
+        "options": ["Strongly Agree", "Neutral", "Disagree"],
+        "responses": [{
+                "response": {
+                  "answer": "Neutral",
+                  "responseId": "123",
+                  "anonymous": true
+                }
+              },
+              {
+                "response": {
+                  "answer": "DisAgree",
+                  "responseId": "123",
+                  "anonymous": true
+                }
+            }]
+      }
+    },
+    {
+          "question": {
           "questionDescription": "Were the illustrations well done?",
           "active": true,
-          "options": ["Strongly Agree", "Neutral", "Disagree"]
+          "options": ["Strongly Agree", "Neutral", "Disagree"],
+          "responses": [{
+                  "response": {
+                    "answer": "Strongly Agree",
+                    "responseId": "123",
+                    "anonymous": true
+                  }
+                }]
         }
-      }]
+    }]
     }
   }'
 
