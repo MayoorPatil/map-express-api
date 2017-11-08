@@ -28,10 +28,12 @@ Surveys (./app/models/survey.js)
 Notes: A survey is the top level document which consists of a title, an
 array of questions, and a user.  Owner is a an Mongo ObjectId associating the
 survey with a signed in user. Surveys hold an array of questions (see below).
+```
 +--- Field -------+--------- Type -----+--- Required? ----+
   title:            String                    Yes
   questions:        String                    Yes
   owner:            ObjectId                 Yes
+```
 
 Questions(./app/models/question.js)
 Notes: Each survey holds an array of questions.  Questions consist of the
@@ -40,34 +42,36 @@ application and will   Options simply refers to the
 choices the user is presented to answer the question.  Options is a field that
 will be used for future enhancements. Responses is an array to
 hold the answers provided by multiple survey takers (see below).  
-
+```
 +-------- Field -------+---- Type ---+--- Required? ----+
   questionDescription:      String            Yes
   active:                   Boolean           Yes
   options:                  array             Yes (see Notes)
   responses:                array             See below
-
+```
 Answers (./app/models/response.js)
 Notes: Each question holds an array of responses (aka answers).  Responses consist
 of a string (the answer itself) a responseId which is generated for you, and
 finally an owner object which is is the user.  Additionally the anonymous field
 will indicate whether the response was provided by an anonymous survey takers
 or a signed in user.     
-
+```
 +--- Field -------+------- Type ------+--- Required? ----+
   answer:            String                 Yes
   responseID:        String                 Yes
   anonymous:         Boolean                Yes (see Notes)
   owner:             ObjectId               No
-
+```
 ## API Definition
 
 Resource Actions:
+```
 Action--+---HTTP Verb-+---- URL -----+---- Description ------------------+
 create    POST          /surveys:id      creates a survey
 index     POST          /surveys         retrieves a list of all surveys
 destroy   DELETE        /surveys:id      deletes a survey
 update    PATCH         /surveys:id      updates a survey
+```
 
 Create: create(req, res, next)
   - HTTP VERB POST
@@ -100,12 +104,13 @@ Index: index(req, res, next)
 
 ## Authentication Resources & API
 User Resource Actions:
+```
 -HTTP Verb-+ ---- URL -----+---- Description ------------------+
     POST         /sign-up      creates a user
     POST         /sign-in      retrieves a list of all players
     DELETE       /players:id   logs the user out
     PATCH        /players:id   changes the user's password
-
+```
 User Resource Notes:
 This full stack project uses the same General Assembly authentication api as was
 used for the Tic Tac Toe Project. Sample parameters are provided in JSON format
