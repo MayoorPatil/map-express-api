@@ -10,25 +10,13 @@ curl "${API}${URL_PATH}" \
   --header "Authorization: Token token=${TOKEN}" \
   --data '{
     "surveyresponse": {
-      "title": "lets Go!",
-      "questions": [{
-        "question1": {
-          "questionDescription": "Was this a good book?",
-          "active": true,
-          "answer": "Strongly Agree"
-        },
-        "question2": {
-          "questionDescription": "Was the length of the book what you expected?",
-          "active": true,
-          "answer": "Neutral"
-        },
-        "question3": {
-          "questionDescription": "Were the illustrations well done?",
-          "active": true,
-          "answer": "Disagree"
-        }
-      }]
-    }
+        "questions": [{
+          "questionDescription": "question1",
+          "answer": "N",
+          "questionId": "2312",
+          "anonymous": true
+        }]
+      }
   }'
 
 echo

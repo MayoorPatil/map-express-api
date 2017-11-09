@@ -9,15 +9,13 @@ curl "${API}${URL_PATH}/${ID}" \
   --header "Content-Type: application/json" \
   --header "Authorization: Token token=${TOKEN}" \
   --data '{
-    "response": {
-      "title": "LETS GO!",
-      "responses": [{
+    "responses": [{
         "response": {
-          "responseValue": "Agree",
-          "responseId": "456"
+          "answer": "Agree",
+          "responseId": "123",
+          "anonymous": false
         }
       }]
-    }
   }'
 
 echo
