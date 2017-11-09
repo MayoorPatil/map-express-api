@@ -3,7 +3,6 @@
 const controller = require('lib/wiring/controller')
 const models = require('app/models')
 const Response = models.response
-const Survey = models.survey
 
 const authenticate = require('./concerns/authenticate')
 const setUser = require('./concerns/set-current-user')
@@ -38,14 +37,6 @@ const create = (req, res, next) => {
 }
 
 const update = (req, res, next) => {
-  // delete req.response._owner  // disallow owner reassignment.
-  // find the survey, then the questions
-    // db.surveys.findOne(ObjectId('5a030cd02c44778ab230144c'))
-  // loop through questions to see if question._id = responseId
-    // db.surveys.findOne(ObjectId('5a030cd02c44778ab230144c')).questions
-  // if true then append the response from req into
-  // db.surveys.findOne(ObjectId('5a030cd02c44778ab230144c')).questions[0].question.responses
-  console.log('is the route working??')
   req.response.update(req.body.response)
     .then(() => res.sendStatus(204))
     .catch(next)
@@ -68,6 +59,4 @@ module.exports = controller({
   { method: authenticate, except: ['index', 'show', 'update'] },
   { method: setModel(Response), only: ['update'] },
   { method: setModel(Response, { forUser: true }), only: ['update', 'destroy'] }
-  // { method: setModel(Survey), only: ['update'] },
-  // { method: setModel(Survey, { forUser: true }), only: ['update', 'destroy'] }
 ] })
