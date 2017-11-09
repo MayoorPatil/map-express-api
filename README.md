@@ -14,8 +14,13 @@ most pressing questions.
 
 ## Project URLs:
 Sema-four Main Page: https://github.com/sema-four
+
 Front-End Repo: https://github.com/sema-four/survey-front-end
+
+Front-End App:https://sema-four.github.io/survey-front-end/
+
 Back-End Repo: https://github.com/sema-four/map-express-api
+
 Back-End App: https://map-express-api.herokuapp.com/
 
 ## ERDs & Wireframes
@@ -25,6 +30,7 @@ https://imgur.com/a/CchfI
 ## Resources
 
 Surveys (./app/models/survey.js)
+
 Notes: A survey is the top level document which consists of a title, an
 array of questions, and a user.  Owner is a an Mongo ObjectId associating the
 survey with a signed in user. Surveys hold an array of questions (see below).
@@ -32,16 +38,17 @@ survey with a signed in user. Surveys hold an array of questions (see below).
 +--- Field -------+--------- Type -----+--- Required? ----+
   title:            String                    Yes
   questions:        String                    Yes
-  owner:            ObjectId                 Yes
+  owner:            ObjectId                  Yes
 ```
 
 Questions(./app/models/question.js)
+
 Notes: Each survey holds an array of questions.  Questions consist of the
 questionDescription (or Title as seen in the UI). The field active is set by the
 application and will   Options simply refers to the
 choices the user is presented to answer the question.  Options is a field that
 will be used for future enhancements. Responses is an array to
-hold the answers provided by multiple survey takers (see below).  
+hold the answers provided by multiple survey takers (see below).
 ```
 +-------- Field -------+---- Type ---+--- Required? ----+
   questionDescription:      String            Yes
@@ -50,11 +57,12 @@ hold the answers provided by multiple survey takers (see below).
   responses:                array             See below
 ```
 Answers (./app/models/response.js)
+
 Notes: Each question holds an array of responses (aka answers).  Responses consist
 of a string (the answer itself) a responseId which is generated for you, and
 finally an owner object which is is the user.  Additionally the anonymous field
 will indicate whether the response was provided by an anonymous survey takers
-or a signed in user.     
+or a signed in user.
 ```
 +--- Field -------+------- Type ------+--- Required? ----+
   answer:            String                 Yes
@@ -147,43 +155,44 @@ Complete details of the authenticationapi may be found here:
 ## CURL Script References:
 
 Authentication
-  Sign in      ./scripts/auth/sign-in.sh
-  Sign up      ./scripts/auth/sign-up.sh
-  Change pw    ./scripts/auth/change-password.sh
-  Log out      ./scripts/auth/sign-out.sh
+- Sign in      ./scripts/auth/sign-in.sh
+- Sign up      ./scripts/auth/sign-up.sh
+- Change pw    ./scripts/auth/change-password.sh
+- Log out      ./scripts/auth/sign-out.sh
 
 Surveys
-  Create:   ./scripts/surveys/create.sh
-  Update:   ./scripts/surveys/update.sh
-  Destroy:  ./scripts/surveys/destroy.sh
-  Index:    ./scripts/surveys/index.sh
+- Create:   ./scripts/surveys/create.sh
+- Update:   ./scripts/surveys/update.sh
+- Destroy:  ./scripts/surveys/destroy.sh
+- Index:    ./scripts/surveys/index.sh
 
 Questions
-  Create:   ./scripts/surveyresponses/create.sh
-  Update:   ./scripts/surveyresponses/update.sh
-  Destroy:  ./scripts/surveyresponses/destroy.sh
-  Index:    ./scripts/surveyresponses/index.sh
+- Create:   ./scripts/surveyresponses/create.sh
+- Update:   ./scripts/surveyresponses/update.sh
+- Destroy:  ./scripts/surveyresponses/destroy.sh
+- Index:    ./scripts/surveyresponses/index.sh
 
 Answers
-  Create:   ./scripts/responses/create.sh
-  Update:   ./scripts/responses/update.sh
-  Destroy:  ./scripts/responses/destroy.sh
-  Index:    ./scripts/responses/index.sh
-
+- Create:   ./scripts/responses/create.sh
+- Update:   ./scripts/responses/update.sh
+- Destroy:  ./scripts/responses/destroy.sh
+- Index:    ./scripts/responses/index.sh
 
 ## Back-end Technologies
-  Mongoose
-  Mongo
-  Heroku (hosting the backend services)
-  Github (hosting the front end and version control)
+- Mongoose
+- Mongo
+- Heroku (hosting the backend services)
+- Github (hosting the front end and version control)
 
 ## Front-end Technologies
-  Express
-  JQuery
-  Bootstrap
-  AJAX
-  HTML
-  CSS
+- Express
+- JQuery
+- Bootstrap
+- AJAX
+- HTML
+- CSS
+- JacaScript
+- Handlebars
 
 ## Use Cases and Story Inspirations
 - As a user I should be able to sign-up/register, so that I am allowed to access the website
@@ -195,14 +204,21 @@ Answers
 - As an signed-in user I should be able to view a list of surveys and respond to any survey
 - As a signed-in user i should be able to view responses to all my surveys
 
+## Issues and Next Steps:
+- Allow survey takers to be anonymous via anonymous flag virtual (back-end)
+- Introduce more question types besides 5-option radio group text (front-end)
+- Show detailed survey results on user dashboard (front-end)
+- Cosmetic enhancements (front-end)
+
 ## about Sema-four
 
   Team Members:
-    Anne Belakonis
-    Mark Keeler
-    Mayoor Patil
-    Michael Dunn
+  - Anne Belakonis
+  - Mark Keeler
+  - Mayoor Patil
+  - Michael Dunn
 
   Process:
+
   Pair programing was used throughout the course of
-  the project with team members taking turns writing code for both the front and back ends of the application.  A Trello board was used to capture issues, user stories, and tasks.  
+  the project with team members taking turns writing code for both the front and back ends of the application.  A Trello board was used to capture issues, user stories, and tasks.
