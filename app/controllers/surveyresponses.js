@@ -17,7 +17,17 @@ const index = (req, res, next) => {
     .catch(next)
 }
 
-const show = (req, res) => {
+const responses = (req, res, next) => {
+  Surveyresponse.find()
+    .then(surveyresponses => res.json({
+      surveyresponses: surveyresponses.filter((surveyresponse) => {
+        return surveyresponse.surveyId === req.params.id
+      })
+    }))
+    .catch(next)
+}
+
+const show = (req, res, next) => {
   res.json({
     surveyresponse: req.surveyresponse.toJSON({ virtuals: true, user: req.user })
   })
@@ -54,10 +64,11 @@ module.exports = controller({
   show,
   create,
   update,
-  destroy
+  destroy,
+  responses
 }, { before: [
-  { method: setUser, only: ['index', 'show'] },
-  { method: authenticate, except: ['index', 'show'] },
+  { method: setUser, only: ['index', 'show', 'responses'] },
+  { method: authenticate, except: ['index', 'show', 'responses'] },
   { method: setModel(Surveyresponse), only: ['show'] },
   { method: setModel(Surveyresponse, { forUser: true }), only: ['update', 'destroy'] }
 ] })
