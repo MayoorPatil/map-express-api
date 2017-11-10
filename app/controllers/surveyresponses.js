@@ -20,8 +20,8 @@ const index = (req, res, next) => {
 const responses = (req, res, next) => {
   Surveyresponse.find()
     .then(surveyresponses => res.json({
-      surveyresponses: surveyresponses.filter((surveys) => {
-        return surveys.surveyId === req.params.id
+      surveyresponses: surveyresponses.filter((surveyresponse) => {
+        return surveyresponse.surveyId === req.params.id
       })
     }))
     .catch(next)
