@@ -21,4 +21,5 @@ module.exports = require('lib/wiring/routes')
 .resources('users', { only: ['index', 'show'] })
 .patch('/responses/:id', 'responses#update')
 .get('/survey-responses/:id', 'surveyresponses#responses')
+.delete('/delete-responses/:id', 'surveyresponses#deleteAllSurveyResponses')
 // all routes created

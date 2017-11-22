@@ -59,13 +59,20 @@ const destroy = (req, res, next) => {
     .catch(next)
 }
 
+const deleteAllSurveyResponses = (req, res, next) => {
+  Surveyresponse.deleteMany({surveyId: req.params.id})
+    .then(() => res.sendStatus(204))
+    .catch(next)
+}
+
 module.exports = controller({
   index,
   show,
   create,
   update,
   destroy,
-  responses
+  responses,
+  deleteAllSurveyResponses
 }, { before: [
   { method: setUser, only: ['index', 'show', 'responses'] },
   { method: authenticate, except: ['index', 'show', 'responses'] },
